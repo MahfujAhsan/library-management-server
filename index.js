@@ -16,9 +16,16 @@ async function run () {
     try {
         await client.connect();
         const userCollection = client.db('libraryManagementSystem').collection('userCollection');
-        app.post("/userData", async (req, res) => {
+
+        app.put("/userData/:email", async (req, res) => {
+            const userEmail = req.params.email;
             const user = req.body;
-            const result = await userCollection.insertOne(user);
+            const filter= {email: userEmail};
+            const options = {upsert: true};
+            const updatedDoc= {
+                $set: user,
+            }
+            const result = await userCollection.updateOne(filter, updatedDoc, options);
             res.send(result);
         });
     }
