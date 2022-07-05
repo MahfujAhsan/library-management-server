@@ -17,6 +17,7 @@ async function run () {
         await client.connect();
         const userCollection = client.db('libraryManagementSystem').collection('userCollection');
 
+        // UserData REST API
         app.put("/userData/:email", async (req, res) => {
             const userEmail = req.params.email;
             const user = req.body;
@@ -28,6 +29,13 @@ async function run () {
             const result = await userCollection.updateOne(filter, updatedDoc, options);
             res.send(result);
         });
+
+        app.get("/userData/:email", async(req, res) => {
+            const email = req.params.email;
+            const query = {email: email};
+            const result = await userCollection.findOne(query);
+            res.send(result);
+        })
     }
     finally {
 
